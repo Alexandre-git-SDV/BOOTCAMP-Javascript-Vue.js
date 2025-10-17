@@ -9,12 +9,9 @@ on:
       - main
 
 jobs:
-  build-and-test:
+  back-end:
+    name: Back-End CI
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
       - name: Checkout repository
@@ -23,43 +20,54 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
 
-      # Backend
-      - name: Install backend dependencies
+      - name: Back-End: Install dependencies
         run: |
           cd Exo4/Back-End
           yarn install
 
-      - name: Run backend tests
+      - name: Back-End: Run tests
         run: |
           cd Exo4/Back-End
           yarn test
 
-      - name: Run backend server (check)
+      - name: Back-End: Run server (check)
         run: |
           cd Exo4/Back-End
           yarn start &
           sleep 5
           kill $!
 
-      # Frontend
+  front-end:
+    name: Front-End CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
       - name: Setup pnpm
         run: npm install -g pnpm
 
-      - name: Install Frontend dependencies
+      - name: Front-End: Install dependencies
         run: |
-          cd Exo4/Front-End
+          cd Exo4/front-end
           pnpm install
 
-      - name: Run frontend tests
+      - name: Front-End: Run tests
         run: |
-          cd Exo4/Front-End
+          cd Exo4/front-end
           pnpm test
 
-      - name: Run frontend server (check)
+      - name: Front-End: Run server (check)
         run: |
-          cd Exo4/Front-End
+          cd Exo4/front-end
           pnpm run dev &
           sleep 5
           kill $!
