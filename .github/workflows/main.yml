@@ -1,4 +1,4 @@
-name: Pipeline CI Javascript / Vue.js / Express.js
+name: CI
 
 on:
   push:
@@ -28,17 +28,17 @@ jobs:
       # Backend
       - name: Install backend dependencies
         run: |
-          cd back-end
+          cd Exo4/Back-End
           yarn install
 
       - name: Run backend tests
         run: |
-          cd back-end
+          cd Exo4/Back-End
           yarn test
 
       - name: Run backend server (check)
         run: |
-          cd back-end
+          cd Exo4/Back-End
           yarn start &
           sleep 5
           kill $!
@@ -47,19 +47,19 @@ jobs:
       - name: Setup pnpm
         run: npm install -g pnpm
 
-      - name: Install frontend dependencies
+      - name: Install Frontend dependencies
         run: |
-          cd front-end
+          cd Exo4/Front-End
           pnpm install
 
       - name: Run frontend tests
         run: |
-          cd front-end
+          cd Exo4/Front-End
           pnpm test
 
       - name: Run frontend server (check)
         run: |
-          cd front-end
+          cd Exo4/Front-End
           pnpm run dev &
           sleep 5
           kill $!
