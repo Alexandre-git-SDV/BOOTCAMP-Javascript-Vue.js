@@ -1,0 +1,65 @@
+name: Pipeline CI Javascript / Vue.js / Express.js
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Backend
+      - name: Install backend dependencies
+        run: |
+          cd back-end
+          yarn install
+
+      - name: Run backend tests
+        run: |
+          cd back-end
+          yarn test
+
+      - name: Run backend server (check)
+        run: |
+          cd back-end
+          yarn start &
+          sleep 5
+          kill $!
+
+      # Frontend
+      - name: Setup pnpm
+        run: npm install -g pnpm
+
+      - name: Install frontend dependencies
+        run: |
+          cd front-end
+          pnpm install
+
+      - name: Run frontend tests
+        run: |
+          cd front-end
+          pnpm test
+
+      - name: Run frontend server (check)
+        run: |
+          cd front-end
+          pnpm run dev &
+          sleep 5
+          kill $!
