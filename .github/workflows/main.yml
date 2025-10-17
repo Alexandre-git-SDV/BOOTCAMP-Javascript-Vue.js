@@ -22,22 +22,23 @@ jobs:
         with:
           node-version: 18
 
-      - name: Back-End: Install dependencies
+      - name: Back-End Install dependencies
         run: |
           cd Exo4/Back-End
           yarn install
 
-      - name: Back-End: Run tests
+      - name: Back-End Run tests
         run: |
           cd Exo4/Back-End
           yarn test
 
-      - name: Back-End: Run server (check)
+      - name: Back-End Run server (check)
         run: |
           cd Exo4/Back-End
           yarn start &
+          SERVER_PID=$!
           sleep 5
-          kill $!
+          kill $SERVER_PID
 
   front-end:
     name: Front-End CI
@@ -55,19 +56,20 @@ jobs:
       - name: Setup pnpm
         run: npm install -g pnpm
 
-      - name: Front-End: Install dependencies
+      - name: Front-End Install dependencies
         run: |
           cd Exo4/front-end
           pnpm install
 
-      - name: Front-End: Run tests
+      - name: Front-End Run tests
         run: |
           cd Exo4/front-end
           pnpm test
 
-      - name: Front-End: Run server (check)
+      - name: Front-End Run server (check)
         run: |
           cd Exo4/front-end
           pnpm run dev &
+          SERVER_PID=$!
           sleep 5
-          kill $!
+          kill $SERVER_PID
